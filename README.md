@@ -1,2 +1,2 @@
 # TP1-algogen
-Code source du TP1 d'algorithme gloutons.
+Code source du TP1 d'algorithmes gloutons.
