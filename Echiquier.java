@@ -6,6 +6,7 @@ public class Echiquier {
 	private Cellule[][] echiquier;
 	private int taille;
 	
+	
 	public Echiquier(int taille) {
 		this.taille = taille;
 		echiquier = new Cellule[taille][taille];
@@ -18,6 +19,7 @@ public class Echiquier {
 				echiquier[x][y] = new Cellule(x, y);
 			}
 		}
+		
 	}
 	
 	public void modifierCellule(int x, int y, int valeur) {
@@ -139,7 +141,6 @@ public class Echiquier {
 	
 	public boolean[][] videPossibilitesFilles(int y, boolean[][] echFaux) { //efface toutes les cases de droite apres avoir tenté tous les choix possibles
 		
-		
 		while(y<this.taille) {
 			for(int i=0;i<this.taille; i++) {
 				echFaux[i][y] = true;
@@ -168,7 +169,6 @@ public class Echiquier {
 				return false;
 		}
 		
-		
 		for (int i = x, j = y; i >= 0 && j >= 0; i--, j--) 
             if (echiquier[i][j].getTypeOccupation() == 1) 
                 return false; 
@@ -179,28 +179,26 @@ public class Echiquier {
 		return true;
 	}
 	
-	public Boolean algorithme2(int numReines) {
+	public Boolean algorithme2(int numReines, int max) {
 		
-		if(numReines>=this.taille) {
-			System.out.println("Reine trouvée");
+		if(numReines>=max) {
+			String aString = (max==1)?".":"s."; //Choix entre pluriel ou singulier
+			System.out.println("A l'aide de l'algorithme 2, nous avions trouvé " + max + " reine" + aString);
 			return true;
 		}
-		
 		
 		for (int i=0; i<this.taille; i++) {
 
 			if(echiquier[i][numReines].getTypeOccupation()==0 && isReinePlacable(i, numReines)) {
 				echiquier[i][numReines].setTypeOccupation(1);
-				
-				if (algorithme2(numReines+1))
+					
+				if (algorithme2(numReines+1, max))
 					return true;
 				else
 					echiquier[i][numReines].setTypeOccupation(0);
 			}
 		}
-		
-		return false;
-		
+		return false;	
 	}
 	
 	public void finalisation() {
@@ -218,14 +216,14 @@ public class Echiquier {
 		initialiserEchiquier();
 		
 	
-		
-		if(!algorithme2(0)) {
-			System.out.println("Solution pas trouvée"); 
-            return false; 
+		int i = 0;
+		while(!algorithme2(0, this.taille-i) && this.taille>i) {
+			i++;
 		}
 		
+		
 		finalisation();
-		toString();
+		System.out.println(this.toString());
 		
 		return true;
 	
